@@ -52,6 +52,19 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
   rsync \
   libglib2.0-dev \
   rpcbind \
+  nano \
+  iputils-ping \
+  iproute2 \
+  netcat-openbsd \
+  dnsutils \
+  tcpdump \
+  strace \
+  lsof \
+  expect \
+  unzip \
+  zip \
+  libssl-dev \
+  openssl \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
