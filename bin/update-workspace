@@ -10,7 +10,7 @@ function update {
   pushd /home/workspace
     git add -A && git commit -m "Backup Date $(date)" 2>&1 > /dev/null
   popd
-  sudo rsync -rahWt --remove-source-files --exclude './code' --exclude '.version' --info=progress2 --info=name0 /workspace/ /home/workspace
+  sudo rsync -rahWt --remove-source-files --exclude './code' --exclude './.cache' --exclude '.version' --info=progress2 --info=name0 /workspace/ /home/workspace
   sudo rsync -rahWt --remove-source-files --info=progress2 --info=name0 /workspace/.version /home/workspace
 }
 
