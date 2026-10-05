@@ -65,8 +65,28 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
   zip \
   libssl-dev \
   openssl \
+  golang-1.24 \
+  google-perftools \
+  libgoogle-perftools-dev \
+  graphviz \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
+
+ENV GOPATH=/opt/go
+ENV GOBIN=/opt/go/bin
+ENV PATH=/usr/lib/go-1.24/bin:$GOBIN:$PATH
+RUN go install github.com/google/pprof@latest \
+  && command -v go \
+  && command -v pprof \
+  && command -v dot \
+  && printf '%s\n' \
+  'export GOPATH=/opt/go' \
+  'export GOBIN=/opt/go/bin' \
+  'export PATH=/usr/lib/go-1.24/bin:$GOBIN:$PATH' \
+  > /etc/profile.d/go-pprof.sh \
+  && chmod 0644 /etc/profile.d/go-pprof.sh \
+  && ln -sf /usr/lib/go-1.24/bin/go /usr/local/bin/go \
+  && ln -sf /opt/go/bin/pprof /usr/local/bin/pprof
 
 RUN useradd --create-home --home-dir /home/workspace --user-group workspace && echo workspace:workspace | chpasswd \
   && chsh -s /bin/bash workspace && echo "workspace ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers

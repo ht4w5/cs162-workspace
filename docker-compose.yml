@@ -4,11 +4,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      network: host
     tty: true
     volumes:
       - ./.workspace:/home/workspace
-    ports:
-      - "16222:22"
     networks:
       cs162:
         # I have `"iptables": false`.

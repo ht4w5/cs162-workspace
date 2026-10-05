@@ -1,5 +1,6 @@
 .git
 .workspace
+.workspace.tar.gz
 .DS_Store
 docker-compose.yml
 README.md
