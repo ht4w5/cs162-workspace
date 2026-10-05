@@ -1,5 +1,6 @@
 .git
 .workspace
+.ssh-host-keys
 .workspace.tar.gz
 .DS_Store
 docker-compose.yml

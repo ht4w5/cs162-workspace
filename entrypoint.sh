@@ -31,6 +31,16 @@ else
 	popd
 fi
 
+# Persist SSH host keys across image rebuilds (bind-mounted from ./.ssh-host-keys)
+sudo mkdir -p /etc/ssh/host_keys /etc/ssh/sshd_config.d
+for key_type in ed25519 rsa; do
+	key=/etc/ssh/host_keys/ssh_host_${key_type}_key
+	if [ ! -f "$key" ]; then
+		sudo ssh-keygen -t "$key_type" -N "" -f "$key" >&2
+	fi
+	echo "HostKey $key"
+done | sudo tee /etc/ssh/sshd_config.d/hostkeys.conf > /dev/null
+
 sudo service ssh start
 
 echo "Docker workspace is ready!"
