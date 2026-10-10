@@ -2,3 +2,4 @@
 .ssh-host-keys/
 .workspace.tar.gz
 .DS_Store
+.cache/

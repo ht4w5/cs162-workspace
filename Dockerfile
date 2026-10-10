@@ -110,7 +110,10 @@ RUN git config --global init.defaultBranch main
 
 COPY ./install_scripts/. /install_scripts
 WORKDIR /install_scripts
-RUN ./create_group0.sh && ./create_student0.sh && ./install_bochs.sh && ./install_rust.sh && ./squish/install.sh
+# --mount=type=cache persists downloaded tarballs across rebuilds
+RUN --mount=type=cache,target=/tmp/cache \
+    CACHE_DIR=/tmp/cache \
+    ./create_group0.sh && ./create_student0.sh && ./install_bochs.sh && ./install_rust.sh && ./squish/install.sh
 
 WORKDIR /
 COPY entrypoint.sh .

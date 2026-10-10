@@ -4,9 +4,14 @@ set -e
 set -x
 
 VERSION=2.6.7
+CACHE_DIR="${CACHE_DIR:-/tmp/cache}"
+mkdir -p "${CACHE_DIR}"
 
-wget -O bochs-${VERSION}.tar.gz "http://downloads.sourceforge.net/project/bochs/bochs/${VERSION}/bochs-${VERSION}.tar.gz"
-tar -xvzf bochs-${VERSION}.tar.gz
+# Download only if not already cached
+if [ ! -f "${CACHE_DIR}/bochs-${VERSION}.tar.gz" ]; then
+  wget -O "${CACHE_DIR}/bochs-${VERSION}.tar.gz" "http://downloads.sourceforge.net/project/bochs/bochs/${VERSION}/bochs-${VERSION}.tar.gz"
+fi
+tar -xvzf "${CACHE_DIR}/bochs-${VERSION}.tar.gz"
 pushd bochs-${VERSION}/
 
 if [[ $(uname -m) =~ ^arm|^aarch ]]; then
@@ -17,7 +22,6 @@ fi
 
 make install
 
-# Clean up
+# Clean up build artifacts only (tarball stays in cache)
 popd
-rm bochs-${VERSION}.tar.gz
 rm -rf bochs-${VERSION}/
