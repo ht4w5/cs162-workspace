@@ -69,12 +69,22 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
   google-perftools \
   libgoogle-perftools-dev \
   graphviz \
+  linux-tools-common \
+  linux-tools-generic \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf /usr/lib/linux-tools-*-generic/perf /usr/local/bin/perf
 
 ENV GOPATH=/opt/go
 ENV GOBIN=/opt/go/bin
 ENV PATH=/usr/lib/go-1.24/bin:$GOBIN:$PATH
+# proxy.golang.org is unreachable from the build network on hosts where Google IPs
+# are blocked. Fall back to a reachable module proxy first (checksums are still
+# verified against the public checksum DB via the proxy). Override with e.g.:
+#   docker compose build --build-arg GOPROXY=https://proxy.golang.org,direct
+ARG GOPROXY=https://goproxy.cn,proxy.golang.org,direct
+ENV GOPROXY=$GOPROXY
 RUN go install github.com/google/pprof@latest \
   && command -v go \
   && command -v pprof \
