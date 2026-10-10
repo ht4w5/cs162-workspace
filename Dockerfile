@@ -74,7 +74,9 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-RUN ln -sf /usr/lib/linux-tools-*-generic/perf /usr/local/bin/perf
+RUN set -e && \
+    perf_path=$(ls -d /usr/lib/linux-tools-*/perf) && \
+    ln -sf "$perf_path" /usr/local/bin/perf
 
 ENV GOPATH=/opt/go
 ENV GOBIN=/opt/go/bin
